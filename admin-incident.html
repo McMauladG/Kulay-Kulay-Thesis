@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Incident Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f5f8;
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .incident {
+      background: #fafafa;
+      padding: 15px;
+      margin: 15px 0;
+      border-left: 4px solid #007BFF;
+      border-radius: 6px;
+    }
+
+    .incident p {
+      margin: 6px 0;
+    }
+
+    .btns {
+      margin-top: 10px;
+    }
+
+    button {
+      margin-right: 10px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .edit-btn {
+      background-color: #ffc107;
+      color: #000;
+    }
+
+    .delete-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .save-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 6px;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Admin – Manage Incident Reports</h2>
+    <div id="incidentList"></div>
+  </div>
+
+  <script>
+    let incidents = JSON.parse(localStorage.getItem('userIncidents') || '[]');
+
+    function loadIncidents() {
+      const container = document.getElementById('incidentList');
+      container.innerHTML = '';
+
+      if (incidents.length === 0) {
+        container.innerHTML = '<p>No incidents reported yet.</p>';
+        return;
+      }
+
+      incidents.forEach((incident, index) => {
+        const div = document.createElement('div');
+        div.className = 'incident';
+
+        div.innerHTML = `
+          <p><strong>Title:</strong> <input type="text" value="${incident.title}" id="title-${index}" /></p>
+          <p><strong>Description:</strong><br>
+          <textarea id="desc-${index}">${incident.description}</textarea></p>
+          <p><strong>Date Submitted:</strong> ${incident.date}</p>
+          <div class="btns">
+            <button class="save-btn" onclick="saveEdit(${index})">Save</button>
+            <button class="delete-btn" onclick="deleteIncident(${index})">Delete</button>
+          </div>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    function saveEdit(index) {
+      const newTitle = document.getElementById(`title-${index}`).value.trim();
+      const newDesc = document.getElementById(`desc-${index}`).value.trim();
+
+      if (!newTitle || !newDesc) {
+        alert('Both title and description are required.');
+        return;
+      }
+
+      incidents[index].title = newTitle;
+      incidents[index].description = newDesc;
+      localStorage.setItem('userIncidents', JSON.stringify(incidents));
+      loadIncidents();
+    }
+
+    function deleteIncident(index) {
+      if (confirm('Are you sure you want to delete this incident?')) {
+        incidents.splice(index, 1);
+        localStorage.setItem('userIncidents', JSON.stringify(incidents));
+        loadIncidents();
+      }
+    }
+
+    loadIncidents();
+  </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Weather Updates</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2faff;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: auto;
+      background: #fff;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #0077cc;
+    }
+
+    form {
+      margin-bottom: 20px;
+      background: #f1f9ff;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    input, textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 8px 14px;
+      background: #0077cc;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .weather-card {
+      background: #f9f9f9;
+      border-left: 4px solid #007bff;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+    }
+
+    .actions {
+      margin-top: 10px;
+    }
+
+    .actions button {
+      background-color: #dc3545;
+    }
+
+    .actions button.edit {
+      background-color: #28a745;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      color: #0077cc;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Admin - Manage Weather Updates</h2>
+
+    <form id="weatherForm">
+      <input type="text" id="date" placeholder="Date (e.g. 2025-07-15)" required />
+      <input type="text" id="location" placeholder="Location" required />
+      <input type="text" id="condition" placeholder="Weather Condition (e.g. Rainy, Sunny)" required />
+      <textarea id="details" rows="3" placeholder="Additional Details" required></textarea>
+      <button type="submit">Save Update</button>
+    </form>
+
+    <div id="weatherList"></div>
+
+    <a href="admin-dashboard.html" class="back-link">← Back to Dashboard</a>
+  </div>
+
+  <script>
+    let updates = JSON.parse(localStorage.getItem('weatherUpdates') || '[]');
+    let editingIndex = -1;
+
+    const form = document.getElementById('weatherForm');
+    const weatherList = document.getElementById('weatherList');
+
+    function renderUpdates() {
+      weatherList.innerHTML = "";
+      updates.forEach((update, index) => {
+        const div = document.createElement('div');
+        div.className = 'weather-card';
+        div.innerHTML = `
+          <p><strong>Date:</strong> ${update.date}</p>
+          <p><strong>Location:</strong> ${update.location}</p>
+          <p><strong>Condition:</strong> ${update.condition}</p>
+          <p><strong>Details:</strong> ${update.details}</p>
+          <div class="actions">
+            <button class="edit" onclick="editUpdate(${index})">Edit</button>
+            <button onclick="deleteUpdate(${index})">Delete</button>
+          </div>
+        `;
+        weatherList.appendChild(div);
+      });
+    }
+
+    function editUpdate(index) {
+      const update = updates[index];
+      document.getElementById('date').value = update.date;
+      document.getElementById('location').value = update.location;
+      document.getElementById('condition').value = update.condition;
+      document.getElementById('details').value = update.details;
+      editingIndex = index;
+    }
+
+    function deleteUpdate(index) {
+      if (confirm("Are you sure you want to delete this update?")) {
+        updates.splice(index, 1);
+        localStorage.setItem('weatherUpdates', JSON.stringify(updates));
+        renderUpdates();
+      }
+    }
+
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      const newUpdate = {
+        date: document.getElementById('date').value,
+        location: document.getElementById('location').value,
+        condition: document.getElementById('condition').value,
+        details: document.getElementById('details').value
+      };
+
+      if (editingIndex > -1) {
+        updates[editingIndex] = newUpdate;
+        editingIndex = -1;
+      } else {
+        updates.push(newUpdate);
+      }
+
+      localStorage.setItem('weatherUpdates', JSON.stringify(updates));
+      form.reset();
+      renderUpdates();
+    }
+
+    renderUpdates();
+  </script>
+</body>
+</html>

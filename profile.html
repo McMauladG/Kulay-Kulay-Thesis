@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Profile - DPRMS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f6f8;
+    }
+
+    header {
+      background-color: #0077b6;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .profile-container {
+      padding: 1rem;
+      background: white;
+      margin: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    .profile-info {
+      margin-bottom: 1rem;
+    }
+
+    .profile-info strong {
+      display: inline-block;
+      width: 120px;
+      color: #555;
+    }
+
+    .edit-btn {
+      display: block;
+      width: 100%;
+      background: #0077b6;
+      color: white;
+      padding: 0.7rem;
+      text-align: center;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background: white;
+      margin: 10% auto;
+      padding: 1rem;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+
+    .modal-content h3 {
+      margin-top: 0;
+    }
+
+    input[type="text"], input[type="email"] {
+      width: 100%;
+      padding: 0.6rem;
+      margin: 0.4rem 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .save-btn {
+      width: 100%;
+      padding: 0.7rem;
+      background: #0096c7;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>👤 User Profile</header>
+
+<div class="profile-container">
+  <div class="profile-info"><strong>Name:</strong> <span id="displayName">Maria Cruz</span></div>
+  <div class="profile-info"><strong>Email:</strong> <span id="displayEmail">maria@email.com</span></div>
+  <div class="profile-info"><strong>Role:</strong> <span id="displayRole">User</span></div>
+  <button class="edit-btn" onclick="openEdit()">✏️ Edit Profile</button>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal" id="editModal">
+  <div class="modal-content">
+    <h3>Edit Profile</h3>
+    <input type="text" id="nameInput" placeholder="Full Name">
+    <input type="email" id="emailInput" placeholder="Email">
+    <input type="text" id="roleInput" placeholder="Role">
+    <button class="save-btn" onclick="saveProfile()">💾 Save</button>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 DPRMS Mobile View
+</footer>
+
+<script>
+  // Load profile from localStorage
+  function loadProfile() {
+    const name = localStorage.getItem('profileName') || 'Maria Cruz';
+    const email = localStorage.getItem('profileEmail') || 'maria@email.com';
+    const role = localStorage.getItem('profileRole') || 'User';
+
+    document.getElementById('displayName').textContent = name;
+    document.getElementById('displayEmail').textContent = email;
+    document.getElementById('displayRole').textContent = role;
+  }
+
+  // Open modal with current info
+  function openEdit() {
+    document.getElementById('nameInput').value = document.getElementById('displayName').textContent;
+    document.getElementById('emailInput').value = document.getElementById('displayEmail').textContent;
+    document.getElementById('roleInput').value = document.getElementById('displayRole').textContent;
+    document.getElementById('editModal').style.display = 'block';
+  }
+
+  // Save profile and update
+  function saveProfile() {
+    const name = document.getElementById('nameInput').value;
+    const email = document.getElementById('emailInput').value;
+    const role = document.getElementById('roleInput').value;
+
+    localStorage.setItem('profileName', name);
+    localStorage.setItem('profileEmail', email);
+    localStorage.setItem('profileRole', role);
+
+    loadProfile();
+    document.getElementById('editModal').style.display = 'none';
+  }
+
+  // Close modal on outside click
+  window.onclick = function(event) {
+    if (event.target === document.getElementById('editModal')) {
+      document.getElementById('editModal').style.display = 'none';
+    }
+  }
+
+  // Initialize
+  loadProfile();
+</script>
+
+</body>
+</html>

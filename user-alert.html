@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Alert Submission</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f3f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #007BFF;
+      color: #fff;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .alert-card {
+      background: #f9f9f9;
+      border-left: 5px solid #007BFF;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Submit Alert</h2>
+    <label>Alert Type:</label>
+    <select id="alertType">
+      <option value="Fire">Fire</option>
+      <option value="Flood">Flood</option>
+      <option value="Medical">Medical</option>
+      <option value="Earthquake">Earthquake</option>
+    </select>
+
+    <label>Description:</label>
+    <textarea id="description" placeholder="Describe the situation..." required></textarea>
+
+    <button onclick="submitAlert()">Submit Alert</button>
+
+    <hr>
+    <h3>My Submitted Alerts</h3>
+    <div id="alertList"></div>
+  </div>
+
+  <script>
+    let alerts = JSON.parse(localStorage.getItem('userAlerts') || '[]');
+
+    function submitAlert() {
+      const type = document.getElementById('alertType').value;
+      const desc = document.getElementById('description').value.trim();
+      const date = new Date().toLocaleString();
+
+      if (!desc) {
+        alert("Please enter a description.");
+        return;
+      }
+
+      alerts.push({ type, description: desc, date });
+      localStorage.setItem('userAlerts', JSON.stringify(alerts));
+      document.getElementById('description').value = '';
+      renderAlerts();
+    }
+
+    function renderAlerts() {
+      const container = document.getElementById('alertList');
+      container.innerHTML = '';
+
+      if (alerts.length === 0) {
+        container.innerHTML = '<p>No alerts submitted.</p>';
+        return;
+      }
+
+      alerts.forEach(alert => {
+        const div = document.createElement('div');
+        div.className = 'alert-card';
+        div.innerHTML = `
+          <p><strong>Type:</strong> ${alert.type}</p>
+          <p><strong>Description:</strong> ${alert.description}</p>
+          <p><strong>Date:</strong> ${alert.date}</p>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    renderAlerts();
+  </script>
+</body>
+</html>

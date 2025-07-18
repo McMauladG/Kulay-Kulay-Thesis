@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Incident Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2f3;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 8px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .incident-list {
+      margin-top: 30px;
+    }
+
+    .incident {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      border-left: 4px solid #007BFF;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Report an Incident</h2>
+    <input type="text" id="incidentTitle" placeholder="Incident Title" required />
+    <textarea id="incidentDescription" placeholder="Incident Description" rows="4"></textarea>
+    <button onclick="addIncident()">Submit Incident</button>
+
+    <div class="incident-list" id="incidentList">
+      <h3>Reported Incidents</h3>
+    </div>
+  </div>
+
+  <script>
+    const incidentList = document.getElementById('incidentList');
+
+    function loadIncidents() {
+      const incidents = JSON.parse(localStorage.getItem('userIncidents') || '[]');
+      incidentList.innerHTML = '<h3>Reported Incidents</h3>';
+      incidents.forEach((incident, index) => {
+        const div = document.createElement('div');
+        div.className = 'incident';
+        div.innerHTML = `
+          <strong>${incident.title}</strong><br>
+          <small>${incident.date}</small><br>
+          <p>${incident.description}</p>
+        `;
+        incidentList.appendChild(div);
+      });
+    }
+
+    function addIncident() {
+      const title = document.getElementById('incidentTitle').value.trim();
+      const description = document.getElementById('incidentDescription').value.trim();
+
+      if (!title || !description) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      const newIncident = {
+        title,
+        description,
+        date: new Date().toLocaleString()
+      };
+
+      const incidents = JSON.parse(localStorage.getItem('userIncidents') || '[]');
+      incidents.push(newIncident);
+      localStorage.setItem('userIncidents', JSON.stringify(incidents));
+
+      document.getElementById('incidentTitle').value = '';
+      document.getElementById('incidentDescription').value = '';
+      loadIncidents();
+    }
+
+    window.onload = loadIncidents;
+  </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #eef1f5;
+    }
+
+    header {
+      background-color: #283593;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      background-color: #3f51b5;
+    }
+
+    nav a {
+      color: white;
+      padding: 12px 18px;
+      text-decoration: none;
+      display: block;
+    }
+
+    nav a:hover {
+      background-color: #5c6bc0;
+    }
+
+    .container {
+      padding: 30px;
+      text-align: center;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .logout {
+      margin-top: 30px;
+    }
+
+    .logout a {
+      color: #d32f2f;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .logout a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Admin Dashboard</h1>
+    <p>Municipal Disaster Preparedness & Response Management System Panamao, Sulu</p>
+  </header>
+
+  <nav>
+    <a href="admin-alert.html">Manage Alerts</a>
+    <a href="admin-incident.html">Manage Incidents</a>
+    <a href="admin-resources.html">Manage Resources</a>
+    <a href="admin-evacuation.html">Evacuation Centers</a>
+    <a href="admin-weather.html">Weather Updates</a>
+    <a href="profile.html">Profile</a>
+  </nav>
+
+  <div class="container">
+    <h2>Welcome, Administrator</h2>
+
+    <div class="card-grid">
+      <a style="text-decoration: none;" href="admin-alert.html"><div class="card"><strong>✔ Alerts:</strong><br> View, add, edit, and delete alerts</div> </a>
+      <a style="text-decoration: none;" href="admin-incident.html"><div class="card"><strong>✔ Incidents:</strong><br> Track & manage all reported incidents</div></a>
+      <a style="text-decoration: none;" href="admin-resources.html"><div class="card"><strong>✔ Resources:</strong><br> Update emergency response resources</div></a>
+      <a style="text-decoration: none;" href="admin-evacuation.html"><div class="card"><strong>✔ Evacuation:</strong><br> Set and monitor safe zones</div></a>
+      <a style="text-decoration: none;" href="admin-weather.html"><div class="card"><strong>✔ Weather:</strong><br> Display real-time weather updates</div></a>
+      <a style="text-decoration: none;" href="profile.html"><div class="card"><strong>✔ Profile:</strong><br> Update your admin information</div></a>
+    </div>
+
+    <div class="logout">
+      <p><a href="logout.html">🔓 Logout</a></p>
+    </div>
+  </div>
+</body>
+</html>
